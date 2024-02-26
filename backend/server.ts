@@ -10,6 +10,7 @@ import resolvers from "./graphql/resolvers";
 import cors from "cors";
 import * as db from "./database/db";
 import { MyContext } from "./utils/interfaces";
+import authContext from "./graphql/context";
 
 async function main() {
 
@@ -34,10 +35,10 @@ async function main() {
         cors<cors.CorsRequest>(),
         express.json(),
         expressMiddleware(apolloServer, {
-            context: async ({ req }) => ({ token: req.headers.authToken })
+            context: authContext
         })
     );
-    
+
     httpServer.listen(8080)
     console.log("Server started listening on http://localhost:8080");
 
