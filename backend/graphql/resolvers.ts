@@ -3,22 +3,21 @@ dotenv.config()
 import Users from "../database/models/Users";
 import Books from "../database/models/Books";
 import * as Types from "../utils/types";
-import { hashPassword } from "../utils/helpers"; 
-import { GraphQLError } from "graphql";
+import { hashPassword, verifyPassword } from "../utils/helpers"; 
+import { UserError } from "graphql-errors";
 import jwt from "jsonwebtoken";
 
 const resolvers = {
     Mutation: {
-        async reqisterUser(parent: any, args: any, context: any) {
+        async registerUser(parent: any, args: any, context: any) {
             try {
-                const { name, username, password, role }: Types.RegisterInput = args.RegisterInput;
+                const { name, username, password, role }: Types.RegisterInput = args.registerInput;
                 const hashedPassword = await hashPassword(password);
                 const isExistingUser = await Users.findOne({
                     username : username                    
                 })
                 if (isExistingUser) {
-                    console.log("🚀 ~ reqisterUser ~ existingUser:", isExistingUser)
-                    throw new GraphQLError("User already exists!")
+                    throw new UserError("User already exists!")
                 } else {
                     const user = await Users.create({
                         name : name,
@@ -28,18 +27,67 @@ const resolvers = {
                     })
                     const id = user._id;
                     const token = jwt.sign({
-                        id
+                        id,
+                        name,
+                        username,
+                        role
                     }, process.env.JWT_SECRET as string)
+                    return {
+                        user : {
+                            id : user._id,
+                            name : user.name,
+                            username : user.username,
+                            role : user.role
+                        },
+                        authToken : token,
+                        message : "User registered successfully!"
+                    }
                 }
             } catch (error: any) {
-                console.log("🚀 ~ reqisterUser ~ error:", error)
-                return {error : error.message}
+                // return {error : error.message}
+                throw new UserError(error.message);
+            }
+        },
+        async loginUser(parent: any, args: any, context: any) {
+            try {
+                const { username, password } : Types.LoginInput = args.loginInput;
+
+                const user: Types.User | null = await Users.findOne({
+                    username : username
+                })
+                if(!user) {
+                    throw new UserError("Invalid Username!")
+                } else {
+                    const isPasswordCorrect: boolean  = await verifyPassword(password, user.password as string);
+                    if (!isPasswordCorrect) {
+                        throw new UserError("Invalid Password!")
+                    }
+                    const token = jwt.sign({
+                        id : user._id,
+                        name : user.name,
+                        username : user.username,
+                        role : user.role
+                    }, process.env.JWT_SECRET as string)
+                    return {
+                        user : {
+                            id : user._id,
+                            name : user.name,
+                            username : user.username,
+                            role : user.role
+                        },
+                        authToken : token,
+                        message : "User logged in successfully!"
+                    }
+                }
+
+            } catch (error: any) {
+                // return {error : error.message}
+                throw new UserError(error.message);
             }
         }
     },
     Query: {
         async user(parent: any, args: any, context: any) {
-            console.log("🚀 ~ user ~ resolver context:", context.user)
             return {
                 id: "1",
                 name: "Advait",

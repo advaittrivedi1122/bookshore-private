@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config()
+dotenv.config();
 import http, { Server } from "http";
 import express from "express";
 import { ApolloServer } from "@apollo/server";
@@ -8,9 +8,12 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import typeDefs from "./graphql/typeDefs";
 import resolvers from "./graphql/resolvers";
 import cors from "cors";
-import * as db from "./database/db";
+import connectDb from "./database/db";
 import { MyContext } from "./utils/interfaces";
 import authContext from "./graphql/context";
+
+// establish connection to mongoDb
+connectDb();
 
 async function main() {
 
@@ -23,7 +26,17 @@ async function main() {
         resolvers,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer })
-        ]
+        ],
+        includeStacktraceInErrorResponses : false,
+        formatError: (formattedError: any, error: any): any => {
+            if (formattedError.message) {
+                return {
+                    error : formattedError.message,
+                    path : formattedError.path
+                }
+            }
+            return formattedError;
+        }
     })
 
     // start apollo graphql server

@@ -11,6 +11,7 @@ const context = async ({ req , res } : any) => {
     try {
         const token: string = req.headers.authorization;
         const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET as string);
+        console.log("🚀 ~ context ~ decodedToken:", decodedToken)
         const user = await Users.findById(decodedToken.id);
         if (!user) {
             return {};
