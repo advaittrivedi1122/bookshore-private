@@ -17,13 +17,13 @@ const BookSchema : Schema = new Schema({
         required : true,
         unique : true
     },
-    author : {
+    uploadedBy : {
         type : Schema.Types.ObjectId,
         required : true
     },
-    previewImage : {
-        data : Schema.Types.Buffer,
-        contentType : Schema.Types.String
+    
+    previewImageLink : {
+        type : Schema.Types.String
     },
     views : {
         type : Schema.Types.Number,

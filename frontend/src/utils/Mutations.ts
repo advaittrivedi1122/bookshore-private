@@ -14,3 +14,20 @@ export const LOGIN_USER = `
       }
     }
 `;
+
+export const REGISTER_USER = `
+    mutation Mutation(
+      $registerInput: RegisterInput
+    ) {
+        registerUser(registerInput: $registerInput) {
+          user {
+            id
+            name
+            username
+            role
+          }
+          authToken
+          message
+        }
+      }
+`;
