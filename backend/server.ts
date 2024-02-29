@@ -45,7 +45,11 @@ async function main() {
     // set graphql server as middleware
     app.use(
         '/graphql',
-        cors<cors.CorsRequest>(),
+        cors<cors.CorsRequest>({
+            origin: '*',
+            credentials: true,
+            optionsSuccessStatus: 200
+        }),
         express.json(),
         expressMiddleware(apolloServer, {
             context: authContext

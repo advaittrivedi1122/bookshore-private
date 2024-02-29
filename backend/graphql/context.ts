@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 // context for graphql that will be called before every mutation / query.
 const context = async ({ req , res } : any) => {
+    console.log("🚀 ~ context ~ req:", req.body)
     if (!req.headers.authorization) {
         return {}
     }
