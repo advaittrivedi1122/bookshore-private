@@ -21,7 +21,10 @@ const BookSchema : Schema = new Schema({
         type : Schema.Types.ObjectId,
         required : true
     },
-    
+    author: {
+        type : Schema.Types.String,
+        required : true
+    },
     previewImageLink : {
         type : Schema.Types.String
     },
@@ -38,7 +41,7 @@ const BookSchema : Schema = new Schema({
         required : true
     },
     tags : {
-        type : Schema.Types.Array
+        type : Schema.Types.String
     },
     description : {
         type : Schema.Types.String

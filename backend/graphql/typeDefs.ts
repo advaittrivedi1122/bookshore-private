@@ -11,6 +11,19 @@ const typeDefs = gql`
         username: String!
         password: String!
     }
+    input BookInput {
+        bookName: String!
+        uploadedBy: ID!
+        author: String!
+        previewImageLink: String
+        bookPath: String!
+        tags: String
+        description: String
+    }
+    type BookOutput {
+        bookId: ID!
+        message: String
+    }
     type User {
         id: ID!
         name: String!
@@ -34,6 +47,7 @@ const typeDefs = gql`
     type Mutation {
         registerUser(registerInput: RegisterInput): RegisterOutput
         loginUser(loginInput: LoginInput): LoginOutput
+        saveBook(bookInput: BookInput): BookOutput
     }
 `
 

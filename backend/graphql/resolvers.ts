@@ -84,19 +84,32 @@ const resolvers = {
                 // return {error : error.message}
                 throw new UserError(error.message);
             }
+        },
+        async saveBook(parent: any, args: any, context: any) {
+            try {
+                const { bookName, uploadedBy, author, previewImageLink, bookPath, tags, description } = args.bookInput;
+                const book: any = await Books.create({
+                    bookName : bookName,
+                    uploadedBy : uploadedBy,
+                    author : author,
+                    previewImageLink : previewImageLink,
+                    bookPath : bookPath,
+                    tags : tags,
+                    description : description
+                })
+                const bookId: string = book._id;
+                return {
+                    bookId : bookId,
+                    message : "Book saved successfully!"
+                }
+            } catch (error: any) {
+                throw new UserError(error.message);
+            }
         }
     },
     Query: {
         async user(parent: any, args: any, context: any) {
-            return {
-                id: "1",
-                name: "Advait",
-                walletAddress: "0x676b0490A802239Eeec703D9194A3f1771cf44A6",
-                createdAt: new Date(),
-                username: context.user.name,
-                role: context.user.role,
-                user: context.user
-            }
+            
         }
     }
 }
