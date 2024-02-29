@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { LOGIN_USER } from '../utils/Mutations';
+import { LOGIN_USER, SAVE_BOOK } from '../utils/Mutations';
 import makeQuery from '../utils/AxiosQuery';
 import Navbar from '../components/Navbar';
+import { FirebaseStorage, getStorage, StorageReference, ref, UploadResult, uploadBytes, getDownloadURL } from 'firebase/storage';
+import firebaseApp, { uploadPdf, uploadPreviewImage } from '../firebase/app';
 
 const Upload = () => {
 
@@ -10,17 +12,55 @@ const Upload = () => {
     const [uploadedImageName, setUploadedImageName] = useState("");
     const [pdfError, setPdfError] = useState("");
     const [imageError, setImageError] = useState("");
-
+    const [pdfNameByUser, setPdfNameByUser] = useState("");
+    const [author, setAuthor] = useState("");
+    const [tags, setTags] = useState("");
+    const [description, setDescription] = useState("");
+    const [pdfFile, setPdfFile]: any = useState(null);
+    const [imageFile, setImageFile]: any = useState(null)
     const allowedPdfType: string = "application/pdf";
     const allowedImageType: string = "image/jpeg";
+
+    
+    // const storage: FirebaseStorage = getStorage(firebaseApp)
+    // const storageRef: StorageReference = ref(storage, "pdf/" + value.name)
+    // let res: UploadResult = await uploadBytes(storageRef, value)
+    // console.log("🚀 ~ uploadFile ~ res:", res)
+    // const url = await getDownloadURL(res.ref)
+    // console.log("🚀 ~ uploadFile ~ url:", url)
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+        if (pdfFile) {
+            const uploadedPdf: any = await uploadPdf(pdfFile.name, pdfFile)
+            console.log("🚀 ~ handleSubmit ~ uploadedPdf:", uploadedPdf)
+            const uploadedPreviewImage: any = await uploadPreviewImage(uploadedImageName, imageFile)
+            const data = await makeQuery(SAVE_BOOK, {
+                bookInput : {
+                    bookName: pdfNameByUser,
+                    uploadedBy: JSON.parse(localStorage.getItem('user') as string).id,
+                    author: author,
+                    bookLink: uploadedPdf.bookLink,
+                    bookPath: uploadedPdf.bookPath,
+                    previewImageLink: uploadedPreviewImage.previewImageLink,
+                    previewImagePath: uploadedPreviewImage.previewImagePath,
+                    tags: tags,
+                    description: description
+                }
+            }, "Mutation")
+            console.log("🚀 ~ handleSubmit ~ data:", data)
+        }
+    }
 
     const handlePdfUpload = async (e: any) => {
         e.preventDefault();
         const file: any = e.target.files[0];
         setUploadedPdfName(file.name);
+        setPdfFile(file);
         if (file.type !== allowedPdfType) {
             setPdfError("Only PDF files are allowed!");
             setUploadedPdfName("");
+            setPdfFile(null);
             return;
         } else {
             setPdfError("");
@@ -32,19 +72,34 @@ const Upload = () => {
         const file: any = e.target.files[0];
         console.log("🚀 ~ handleImageUpload ~ file:", file)
         setUploadedImageName(file.name);
+        setImageFile(file);
         if (file.type !== allowedImageType) {
             setImageError("Only JPG/JPEG files are allowed!");
             setUploadedImageName("");
+            setImageFile(null);
             return;
         } else {
             setImageError("");
         }
     }
 
+    const handleReset = () => {
+        setUploadedPdfName("");
+        setUploadedImageName("");
+        setPdfError("");
+        setImageError("");
+        setPdfNameByUser("");
+        setAuthor("");
+        setTags("");
+        setDescription("");
+    }
+
     useEffect(() => {
+            
         console.log('uploadedImageName', uploadedImageName)
         console.log('uploadedPdfName', uploadedPdfName)
-    }, [isLoggedIn, uploadedPdfName, uploadedImageName, pdfError, imageError])
+        console.log('pdfNameByUser', pdfNameByUser)
+    }, [isLoggedIn, uploadedPdfName, uploadedImageName, pdfError, imageError, pdfNameByUser])
 
     return (
         <div>
@@ -142,25 +197,23 @@ const Upload = () => {
 
                     <div className='text-center mt-[2rem] text-md'>
                         {/* PDF Name */}
-                        <input type="text" placeholder='Pdf Name' className='p-3 rounded w-[25vw]' onChange={(e) => {  }} />
+                        <input type="text" placeholder='Pdf Name' className='p-3 rounded w-[25vw]' onChange={(e) => { setPdfNameByUser(e.target.value) }} value={pdfNameByUser} />
                     </div>
                     <div className='text-center mt-[2rem] text-md'>
                         {/* Author Name */}
-                        <input type="text" placeholder='Author Name' className='p-3 rounded w-[25vw]' onChange={(e) => {  }} />
+                        <input type="text" placeholder='Author Name' className='p-3 rounded w-[25vw]' onChange={(e) => { setAuthor(e.target.value) }} value={author} />
                     </div>
                     <div className='text-center mt-[2rem] text-md'>
                         {/* Tags */}
-                        <input type="text" placeholder='Tags (optional) - science, fiction' className='p-3 rounded w-[25vw]' onChange={(e) => {  }} />
+                        <input type="text" placeholder='Tags (optional) - science, fiction' className='p-3 rounded w-[25vw]' onChange={(e) => { setTags(e.target.value) }} value={tags} />
                     </div>
                     <div className='text-center mt-[2rem] text-md'>
                         {/* Description */}
-                        <input type="text" placeholder='Description (optional)' className='p-3 rounded w-[25vw]' onChange={(e) => {  }} />
+                        <input type="text" placeholder='Description (optional)' className='p-3 rounded w-[25vw]' onChange={(e) => { setDescription(e.target.value) }} value={description} />
                     </div>
                     <div className='flex justify-evenly h-[2.5rem] mt-[2rem] text-md'>
-                        {/* Description */}
-                        {/* <input type="text" placeholder='Description (optional)' className='p-3 rounded w-[25vw]' onChange={(e) => {  }} /> */}
-                                    <button className='w-[40%] h-[2.5rem] bg-white rounded-lg text-red-500'>Reset</button>
-                                    <button className='w-[40%] h-[2.5rem] bg-white rounded-lg'>Submit</button>
+                                    <button className='w-[40%] h-[2.5rem] bg-white rounded-lg text-red-500' onClick={handleReset}>Reset</button>
+                                    <button className='w-[40%] h-[2.5rem] bg-white rounded-lg' onClick={handleSubmit}>Submit</button>
                     </div>
                         </div>
                     </div>

@@ -28,6 +28,10 @@ const BookSchema : Schema = new Schema({
     previewImageLink : {
         type : Schema.Types.String
     },
+    bookLink : {
+        type : Schema.Types.String,
+        required : true
+    },
     views : {
         type : Schema.Types.Number,
         default : 0
@@ -35,6 +39,9 @@ const BookSchema : Schema = new Schema({
     downloads : {
         type : Schema.Types.Number,
         default : 0
+    },
+    previewImagePath : {
+        type : Schema.Types.String
     },
     bookPath : {
         type : Schema.Types.String,

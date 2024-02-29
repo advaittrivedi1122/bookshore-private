@@ -87,13 +87,15 @@ const resolvers = {
         },
         async saveBook(parent: any, args: any, context: any) {
             try {
-                const { bookName, uploadedBy, author, previewImageLink, bookPath, tags, description } = args.bookInput;
+                const { bookName, uploadedBy, author, bookLink, previewImageLink, bookPath, previewImagePath, tags, description } = args.bookInput;
                 const book: any = await Books.create({
                     bookName : bookName,
                     uploadedBy : uploadedBy,
                     author : author,
+                    bookLink : bookLink,
                     previewImageLink : previewImageLink,
                     bookPath : bookPath,
+                    previewImagePath : previewImagePath,
                     tags : tags,
                     description : description
                 })

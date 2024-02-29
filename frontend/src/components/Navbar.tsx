@@ -7,6 +7,8 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }: any) => {
   const handleLogout = () => {
     setIsLoggedIn(false)
     setShow(false)
+    setAuthToken("");
+    localStorage.clear();
   }
   
   useEffect(() => {
@@ -15,10 +17,6 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }: any) => {
       setAuthToken(token);
       setIsLoggedIn(true);
     } 
-    if (!isLoggedIn) {
-      setAuthToken("");
-      localStorage.clear()
-    }
   }, [show, isLoggedIn])
 
   return (

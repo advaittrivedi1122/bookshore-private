@@ -31,3 +31,14 @@ export const REGISTER_USER = `
         }
       }
 `;
+
+export const SAVE_BOOK = `
+      mutation Mutation(
+        $bookInput: BookInput
+      ) {
+        saveBook(bookInput: $bookInput) {
+          bookId
+          message
+        }
+      }
+`;

@@ -15,8 +15,10 @@ const typeDefs = gql`
         bookName: String!
         uploadedBy: ID!
         author: String!
+        bookLink: String!
         previewImageLink: String
         bookPath: String!
+        previewImagePath: String
         tags: String
         description: String
     }
@@ -29,6 +31,20 @@ const typeDefs = gql`
         name: String!
         username: String!
         role: String!
+    }
+    type Book {
+        id: ID!
+        name: String!
+        uploadedBy: String!
+        author: String!
+        bookLink: String!
+        previewImageLink: String
+        bookPath: String!
+        previewImagePath: String
+        tags: String
+        description: String
+        views: Int
+        downloads: Int
     }
     type RegisterOutput {
         user: User!
@@ -43,6 +59,7 @@ const typeDefs = gql`
     type Query {
         user(id: ID!): User!
         getUsers: [User]
+        getAllBooks: [Book]
     }
     type Mutation {
         registerUser(registerInput: RegisterInput): RegisterOutput
