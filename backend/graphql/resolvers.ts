@@ -110,8 +110,29 @@ const resolvers = {
         }
     },
     Query: {
-        async user(parent: any, args: any, context: any) {
-            
+        async getAllBooks(parent: any, args: any, context: any) {
+            try {
+                const books: any = await Books.find();
+                console.log("🚀 ~ getAllBooks ~ books:", books)
+                return books.map((book: any) => {
+                    return {
+                        id : book._id,
+                        name : book.bookName,
+                        uploadedBy : book.uploadedBy,
+                        author : book.author,
+                        bookLink : book.bookLink,
+                        previewImageLink : book.previewImageLink,
+                        bookPath : book.bookPath,
+                        previewImagePath : book.previewImagePath,
+                        tags : book.tags,
+                        description : book.description,
+                        views : book.views,
+                        downloads : book.downloads
+                    }
+                });
+            } catch (error: any) {
+                throw new UserError(error.message)
+            }
         }
     }
 }

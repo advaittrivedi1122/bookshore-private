@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const makeQuery = async (query: string, variables: Record<string,any>, operationName: "Mutation" | "Query") => {
+const makeQuery = async (query: string, variables: Record<string,any> | null, operationName: "Mutation" | "Query") => {
     try {
         const res: any = await axios.post(process.env.APOLLO_SERVER_URL as string + "graphql", {
             operationName: operationName,
