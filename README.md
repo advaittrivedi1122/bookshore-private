@@ -26,3 +26,5 @@ Steps to start Frontend :-
 2 - npm install
 3 - npm run dev
 ```
+
+* ### Checkout the project here 🔗 https://bookshore.vercel.app/
