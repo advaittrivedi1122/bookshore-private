@@ -56,12 +56,8 @@ async function main() {
         })
     );
 
-    httpServer.listen(8080)
-    console.log("Server started listening on http://localhost:8080");
-
-    app.get("/", (req: express.Request, res: express.Response) => {
-        res.send("<h1>Hello from server!!</h1><br><a href='http://localhost:8080/graphql' target='_blank'>GraphQL</a>")
-    })
+    httpServer.listen(process.env.PORT)
+    console.log("Server started listening on port", process.env.PORT);
 
 }
 

@@ -22,7 +22,6 @@ const Register = () => {
                     role
                 }
             }, "Mutation")
-            console.log("🚀 ~ handleRegister ~ data:", data)
             // Handle successful login, for example, save token to local storage
             if (data.registerUser) {
                 localStorage.setItem('authToken', data.registerUser.authToken);
@@ -36,9 +35,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-        console.log("username", username)
-        console.log('password', password)
-        console.log('role', role)
+        
     }, [username, password, role, name])
 
     return (

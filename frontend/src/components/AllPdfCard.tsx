@@ -11,7 +11,6 @@ const AllPdfCard = () => {
 
     const getAllBooks = async () => {
         const data: any = await makeQuery(GET_ALL_BOOKS, null, "Query")
-        console.log("🚀 ~ getAllBooks ~ data:", data)
         setAllPdfs(data.getAllBooks)
         setIsDataFetched(true);
     }
@@ -28,8 +27,6 @@ const AllPdfCard = () => {
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-row'>
                     {allPdfs.length &&
                         allPdfs.map((pdf: any) => {
-                            console.log("🚀 ~ allPdfs.map ~ pdf:", pdf);
-
                             return pdf.previewImageLink
                             ? (
                                         <div className='m-4 h-[50vh] w-[80vw] sm:w-[40vw] md:w-[30vw] lg:w-[22vw] border-emerald-500 border-2 rounded-xl cursor-pointer' onClick={()=>{navigate(`/pdf/${pdf.id}`)}} >

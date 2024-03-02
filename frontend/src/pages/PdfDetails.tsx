@@ -16,7 +16,6 @@ const PdfDetails = () => {
 
     const getBook = async (id: string) => {
         const data: any = await makeQuery(GET_BOOK, {id}, "Query")
-        console.log("🚀 ~ getAllBooks ~ data:", data)
         setPdf(data.book)
         setIsDataFetched(true);
         setViews(data.book.views);
@@ -36,7 +35,6 @@ const PdfDetails = () => {
     }
 
     useEffect(() => {
-        console.log('bookId', bookId)
         if (!isDataFetched) {
             getBook(bookId as string)
         }

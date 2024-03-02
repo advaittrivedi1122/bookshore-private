@@ -155,7 +155,6 @@ const resolvers = {
             }
         },
         async increaseViews(parent: any, args: any, context: any) {
-            console.log("🚀 ~ increaseViews ~ args:", args)
             try {
                 const book: any = await Books.findByIdAndUpdate(args.id, {
                     "$inc" : { "views" : 1 }
@@ -166,7 +165,6 @@ const resolvers = {
             }
         },
         async increaseDownloads(parent: any, args: any, context: any) {
-            console.log("🚀 ~ increaseDownloads ~ args:", args)
             try {
                 const book: any = await Books.findByIdAndUpdate(args.id, {
                     "$inc" : { "downloads" : 1 }

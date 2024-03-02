@@ -20,7 +20,6 @@ const Login = () => {
                     password
                 }
             }, "Mutation")
-            console.log("🚀 ~ handleLogin ~ data:", data)
             // Handle successful login, for example, save token to local storage
             if(data.loginUser) {
                 localStorage.setItem('authToken', data.loginUser.authToken);
@@ -35,8 +34,7 @@ const Login = () => {
     }
 
     useEffect(()=>{
-        console.log("username", username)
-        console.log('password', password)
+        
     }, [username, password, isLoggedIn])
 
     return (

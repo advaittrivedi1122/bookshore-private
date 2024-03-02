@@ -15,7 +15,6 @@ const makeQuery = async (query: string, variables: Record<string,any> | null, op
             }
         })
         if (res) {
-            console.log("🚀 ~ makeQuery ~ res:", res.data.data)
             return res.data.data
         }
     } catch (error:any) {

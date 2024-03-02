@@ -21,19 +21,10 @@ const Upload = () => {
     const allowedPdfType: string = "application/pdf";
     const allowedImageType: string = "image/jpeg";
 
-    
-    // const storage: FirebaseStorage = getStorage(firebaseApp)
-    // const storageRef: StorageReference = ref(storage, "pdf/" + value.name)
-    // let res: UploadResult = await uploadBytes(storageRef, value)
-    // console.log("🚀 ~ uploadFile ~ res:", res)
-    // const url = await getDownloadURL(res.ref)
-    // console.log("🚀 ~ uploadFile ~ url:", url)
-
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         if (pdfFile) {
             const uploadedPdf: any = await uploadPdf(pdfFile.name, pdfFile)
-            console.log("🚀 ~ handleSubmit ~ uploadedPdf:", uploadedPdf)
             const uploadedPreviewImage: any = await uploadPreviewImage(uploadedImageName, imageFile)
             const data = await makeQuery(SAVE_BOOK, {
                 bookInput : {
@@ -48,7 +39,6 @@ const Upload = () => {
                     description: description
                 }
             }, "Mutation")
-            console.log("🚀 ~ handleSubmit ~ data:", data)
         }
     }
 
@@ -70,7 +60,6 @@ const Upload = () => {
     const handleImageUpload = async (e: any) => {
         e.preventDefault();
         const file: any = e.target.files[0];
-        console.log("🚀 ~ handleImageUpload ~ file:", file)
         setUploadedImageName(file.name);
         setImageFile(file);
         if (file.type !== allowedImageType) {
@@ -96,9 +85,6 @@ const Upload = () => {
 
     useEffect(() => {
             
-        console.log('uploadedImageName', uploadedImageName)
-        console.log('uploadedPdfName', uploadedPdfName)
-        console.log('pdfNameByUser', pdfNameByUser)
     }, [isLoggedIn, uploadedPdfName, uploadedImageName, pdfError, imageError, pdfNameByUser])
 
     return (
