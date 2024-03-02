@@ -56,8 +56,17 @@ const typeDefs = gql`
         authToken: String!
         message: String
     }
+    type IncreaseViewsOutput {
+        success: Boolean
+    }
+    type IncreaseDownloadsOutput {
+        success: Boolean
+    }
     type Query {
         getAllBooks: [Book]
+        book(id: ID!): Book
+        increaseViews(id: ID!): IncreaseViewsOutput
+        increaseDownloads(id: ID!): IncreaseDownloadsOutput
     }
     type Mutation {
         registerUser(registerInput: RegisterInput): RegisterOutput

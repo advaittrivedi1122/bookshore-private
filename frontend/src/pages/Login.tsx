@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { LOGIN_USER } from '../utils/Mutations';
 import makeQuery from '../utils/AxiosQuery';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
     
     const handleLogin = async (e: any) => {
         e.preventDefault();
@@ -24,6 +26,7 @@ const Login = () => {
                 localStorage.setItem('authToken', data.loginUser.authToken);
                 localStorage.setItem('user', JSON.stringify(data.loginUser.user));
                 setIsLoggedIn(true)
+                navigate('/')
             }
             // Redirect or update UI as needed
           } catch (err) {
@@ -38,7 +41,7 @@ const Login = () => {
 
     return (
         <div>
-            <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+            <Navbar isLogin={true} />
         <div className='absolute top-0 flex flex-col h-screen w-screen bg-slate-900 justify-center items-center text-emerald-500 font-bold text-xl'>
             <div className='border-2 mt-8 border-emerald-500 h-[25rem] w-[60vw] lg:w-[30vw] md:w-[80vw] rounded-lg'>
                 <div className='text-center mt-[2rem] text-2xl'>
@@ -57,7 +60,7 @@ const Login = () => {
                 {/* Submit */}
                     <button type="submit" className='bg-white mt-[1rem] h-[2.3rem] rounded lg:w-[25vw] w-[40vw] ' onClick={handleLogin}>Login</button>
                 </div>
-                <div className='text-center mt-[2rem] text-sm'>
+                <div className='text-center mt-[2rem] text-sm cursor-pointer' onClick={()=>{navigate('/register')}}>
                 {/* Password */}
                     Don't have an account ? Register here.
                 </div>

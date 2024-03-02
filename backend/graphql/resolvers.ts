@@ -113,7 +113,6 @@ const resolvers = {
         async getAllBooks(parent: any, args: any, context: any) {
             try {
                 const books: any = await Books.find();
-                console.log("🚀 ~ getAllBooks ~ books:", books)
                 return books.map((book: any) => {
                     return {
                         id : book._id,
@@ -133,7 +132,51 @@ const resolvers = {
             } catch (error: any) {
                 throw new UserError(error.message)
             }
+        },
+        async book(parent: any, args: any, context: any) {
+            try {
+                const book: any = await Books.findById(args.id);
+                return {
+                    id : book._id,
+                    name : book.bookName,
+                    uploadedBy : book.uploadedBy,
+                    author : book.author,
+                    bookLink : book.bookLink,
+                    previewImageLink : book.previewImageLink,
+                    bookPath : book.bookPath,
+                    previewImagePath : book.previewImagePath,
+                    tags : book.tags,
+                    description : book.description,
+                    views : book.views,
+                    downloads : book.downloads
+                }
+            } catch (error: any) {
+                throw new UserError(error.message)
+            }
+        },
+        async increaseViews(parent: any, args: any, context: any) {
+            console.log("🚀 ~ increaseViews ~ args:", args)
+            try {
+                const book: any = await Books.findByIdAndUpdate(args.id, {
+                    "$inc" : { "views" : 1 }
+                })
+                return { success : true }
+            } catch (error: any) {
+                throw new UserError(error.message)
+            }
+        },
+        async increaseDownloads(parent: any, args: any, context: any) {
+            console.log("🚀 ~ increaseDownloads ~ args:", args)
+            try {
+                const book: any = await Books.findByIdAndUpdate(args.id, {
+                    "$inc" : { "downloads" : 1 }
+                })
+                return { success : true }
+            } catch (error: any) {
+                throw new UserError(error.message)
+            }
         }
+
     }
 }
 

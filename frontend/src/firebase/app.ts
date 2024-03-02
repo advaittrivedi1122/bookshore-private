@@ -1,5 +1,5 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { FirebaseStorage, StorageReference, UploadResult, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { FirebaseStorage, StorageReference, UploadResult, getDownloadURL, getStorage, ref, uploadBytes, getBlob } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -22,10 +22,26 @@ export const uploadPdf = async (pdfName: string, pdfFile: File) => {
   const url = await getDownloadURL(res.ref)
   console.log("🚀 ~ uploadFile ~ url:", url)
   return {
-    bookLink : url,
-    bookPath : storagePath,
-    response : res
+    bookLink: url,
+    bookPath: storagePath,
+    response: res
   }
+}
+
+export const downloadPdf = async (pdfPath: string) => {
+  const storage: FirebaseStorage = getStorage(app)
+  const pdfRef: StorageReference = ref(storage, pdfPath);
+  const fileBlob = await getBlob(pdfRef)
+  console.log("🚀 ~ uploadFile ~ fileBlob:", fileBlob)
+  let a = document.createElement("a");
+  document.body.appendChild(a);
+  // a.style = "display: none";
+  let fileDownloadUrl = window.URL.createObjectURL(fileBlob);
+  console.log("🚀 ~ uploadFile ~ fileDownloadUrl:", fileDownloadUrl)
+  a.href = fileDownloadUrl;
+  a.download = "book.pdf";
+  a.click();
+  window.URL.revokeObjectURL(fileDownloadUrl);
 }
 
 export const uploadPreviewImage = async (previewImageName: string, previewImageFile: File) => {
@@ -37,9 +53,9 @@ export const uploadPreviewImage = async (previewImageName: string, previewImageF
   const url = await getDownloadURL(res.ref)
   console.log("🚀 ~ uploadFile ~ url:", url)
   return {
-    previewImageLink : url,
-    previewImagePath : storagePath,
-    response : res
+    previewImageLink: url,
+    previewImagePath: storagePath,
+    response: res
   }
 }
 

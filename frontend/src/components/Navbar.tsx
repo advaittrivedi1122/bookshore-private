@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
-const Navbar = ({ isLoggedIn, setIsLoggedIn }: any) => {
+const Navbar = ({ isLogin }: any) => {
   const [show, setShow] = useState(false);
   const [authToken, setAuthToken] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setIsLoggedIn(false)
@@ -17,11 +20,14 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }: any) => {
       setAuthToken(token);
       setIsLoggedIn(true);
     } 
+    if (!token && !isLogin) {
+      navigate('/register')
+    }
   }, [show, isLoggedIn])
 
   return (
     <div className='flex flex-row flex-wrap items-center justify-between bg-blue-500 h-[4rem] w-full relative z-10'>
-      <div className='text-white text-2xl font-mono font-semibold pl-10 cursor-pointer'>BookShore</div>
+      <div className='text-white text-2xl font-mono font-semibold pl-10 cursor-pointer' onClick={()=>{navigate('/')}}>BookShore</div>
 
     {isLoggedIn && (
       <div className='text-white font-mono font-semibold h-[2rem] w-[5rem] pr-[2.5rem] cursor-pointer' onClick={() => setShow(!show)}>
@@ -34,9 +40,9 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }: any) => {
     )}
       {show && (
         <div className='h-auto w-[150px] bg-white absolute top-[4.1rem] right-[2.5rem] rounded z-9'>
-          <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer'>View PDFs</div>
-          <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer'>Upload PDF</div>
-          <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer'>Favourites</div>
+          <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer' onClick={()=>{navigate('/')}}>View PDFs</div>
+          <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer' onClick={()=>{navigate('/upload')}}>Upload PDF</div>
+          {/* <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer'>Favourites</div> */}
           <div className='hover:text-blue-500 text-slate-400 text-lg text-center font-mono font-semibold p-2 cursor-pointer' onClick={handleLogout}>Logout</div>
         </div>
       )}
