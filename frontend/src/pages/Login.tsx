@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LOGIN_USER } from '../utils/Mutations';
 import makeQuery from '../utils/AxiosQuery';
 import Navbar from '../components/Navbar';
@@ -34,7 +34,7 @@ const Login = () => {
     }
 
     useEffect(()=>{
-        
+
     }, [username, password, isLoggedIn])
 
     return (

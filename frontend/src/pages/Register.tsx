@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { REGISTER_USER } from '../utils/Mutations';
 import makeQuery from '../utils/AxiosQuery';
 import Navbar from '../components/Navbar';

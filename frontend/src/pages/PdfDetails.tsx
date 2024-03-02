@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import makeQuery from '../utils/AxiosQuery'
 import { GET_BOOK, INCREASE_DOWNLOADS, INCREASE_VIEWS } from '../utils/Queries'
 import { useParams } from 'react-router-dom'
@@ -23,14 +23,14 @@ const PdfDetails = () => {
     }
 
     const handleViewPdf = async () => {
-        const data: any = await makeQuery(INCREASE_VIEWS, { id : bookId }, "Query")
+        await makeQuery(INCREASE_VIEWS, { id : bookId }, "Query")
         setViews(views + 1);
     }
     
     const handleDownloadPdf = async (e: any) => {
         e.preventDefault();
         downloadPdf(pdf.bookPath);
-        const data: any = await makeQuery(INCREASE_DOWNLOADS, { id : bookId }, "Query")
+        await makeQuery(INCREASE_DOWNLOADS, { id : bookId }, "Query")
         setDownloads(downloads + 1);
     }
 

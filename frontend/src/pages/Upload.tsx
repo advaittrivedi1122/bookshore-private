@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { LOGIN_USER, SAVE_BOOK } from '../utils/Mutations';
+import { useEffect, useState } from 'react'
+import { SAVE_BOOK } from '../utils/Mutations';
 import makeQuery from '../utils/AxiosQuery';
 import Navbar from '../components/Navbar';
-import { FirebaseStorage, getStorage, StorageReference, ref, UploadResult, uploadBytes, getDownloadURL } from 'firebase/storage';
-import firebaseApp, { uploadPdf, uploadPreviewImage } from '../firebase/app';
+import { uploadPdf, uploadPreviewImage } from '../firebase/app';
 
 const Upload = () => {
 
@@ -26,7 +25,7 @@ const Upload = () => {
         if (pdfFile) {
             const uploadedPdf: any = await uploadPdf(pdfFile.name, pdfFile)
             const uploadedPreviewImage: any = await uploadPreviewImage(uploadedImageName, imageFile)
-            const data = await makeQuery(SAVE_BOOK, {
+            await makeQuery(SAVE_BOOK, {
                 bookInput : {
                     bookName: pdfNameByUser,
                     uploadedBy: JSON.parse(localStorage.getItem('user') as string).id,
